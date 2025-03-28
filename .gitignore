@@ -1,0 +1,15 @@
+/dist
+/node_modules
+
+logs
+*.logs
+npm-debug.log*
+
+coverage/
+*.tfstate*
+*.lock.hcl*
+.terraform*
+
+/src/api/redis/data
+
+.serverless*
