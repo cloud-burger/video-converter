@@ -141,4 +141,4 @@ Falhas no processamento são enviadas via **SNS**, com payloads informando ID do
 
 ## 📄 Licença
 
-Projeto licenciado sob a **ISC License**.
+Projeto licenciado sob a **MIT License**.
