@@ -8,6 +8,7 @@ export class ImageRepository implements IStorage {
     constructor(private storageClient: S3Client, private bucketName: string) {}
 
     async getImagesByUserId(userId: string): Promise<string | null> {
+        //TODO: Ajustar para o padrão que for utilizado, esta fixo com um arquivo do meu S3
         const objectKey = userId + '/processed/diagnostic.zip';
         const command = new GetObjectCommand({ Bucket: this.bucketName, Key: objectKey });
         //TODO: ExpiresIn precisa estar em uma constante
