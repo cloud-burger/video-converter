@@ -1,0 +1,35 @@
+service: video-upload
+
+frameworkVersion: "3"
+package:
+  individually: true
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs20.x
+  environment:
+    TEST: test
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    external:
+      - knex
+    watch:
+      pattern: "src/**/*.ts"
+      ignore: "**/*.test.ts"
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+functions:
+  authorizer:
+    handler: src/cmd/functions/authorizer/index.handler
+    events:
+      - http:
+          method: GET
+          path: /authorizer
