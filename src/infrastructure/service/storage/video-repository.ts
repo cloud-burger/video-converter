@@ -16,8 +16,6 @@ export class VideoRepository {
         const objectKey = userId + '/videos/' + fileName;
 
         try {
-            await this.storageClient.send(new HeadObjectCommand({ Bucket: this.bucketName, Key: objectKey }));
-
             const command = new PutObjectCommand({ Bucket: this.bucketName, Key: objectKey });
             const presignedUrl = await getSignedUrl(this.storageClient, command, { expiresIn: EXPIRES_IN });
 
@@ -38,8 +36,8 @@ export class VideoRepository {
 
             return StorageVideoMapper.toDomain(storageData as StorageVideoSchema);
         } catch (error: any) {
-            logger.debug({
-                message: 'Image object not found',
+            logger.error({
+                message: 'Error get video upload',
                 data: {
                     error                    
                 }
