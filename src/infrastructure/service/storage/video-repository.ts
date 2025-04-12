@@ -28,7 +28,7 @@ export class VideoRepository {
             };
 
             logger.debug({
-                message: 'Video repository data',
+                message: 'Video repository - Success',
                 data: {
                     storageData
                 }
@@ -37,7 +37,7 @@ export class VideoRepository {
             return StorageVideoMapper.toDomain(storageData as StorageVideoSchema);
         } catch (error: any) {
             logger.error({
-                message: 'Error get video upload',
+                message: 'Video repository - Error',
                 data: {
                     error                    
                 }
