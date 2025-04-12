@@ -1,10 +1,11 @@
+import { Images } from "~/domain/entities/images";
 import { GetImageResponse } from "./dtos/get-image-response";
 
 export class GetImagePresenter {
-    //TODO: Substituir tipo string do parâmetro recebido pela classe 
-    static toHttp(image: string): GetImageResponse {
+    static toHttp(images: Images): GetImageResponse {
         return {
-            url: image
+            fileName: images.filename,
+            downloadLink: images.url
         };
     }
 }

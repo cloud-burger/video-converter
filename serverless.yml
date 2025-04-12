@@ -38,4 +38,4 @@ functions:
     events:
       - http:
           method: GET
-          path: /processed/{userId}
+          path: /processed/{videoId}

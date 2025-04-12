@@ -1,17 +1,21 @@
+import { NotFoundError } from "@cloud-burger/handlers";
+import { Images } from "~/domain/entities/images";
 import { ImageRepository } from "~/infrastructure/service/storage/image-repository";
 
 interface Input {
     userId: string;
+    videoId: string;
 }
 
 export class GetImagesByUserIdUseCase {
     constructor(private imageRepository: ImageRepository) {}
 
-    //TODO: Retornar uma classe entity em vez de string
-    async execute({ userId }: Input): Promise<string> {
-        const images = await this.imageRepository.getImagesByUserId(userId);
+    async execute({ userId, videoId }: Input): Promise<Images> {
+        const images = await this.imageRepository.getImagesByUserId(userId, videoId);
 
-        //TODO: Implementar tratamento quando não encontra arquivo
+        if (!images) {  
+            throw new NotFoundError('Image file not found');
+        }
 
         return images;
     }

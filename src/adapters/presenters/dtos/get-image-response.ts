@@ -1,3 +1,4 @@
 export interface GetImageResponse {
-    url: string;
+    fileName: string;
+    downloadLink: string;
 }  
