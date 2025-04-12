@@ -14,7 +14,7 @@ export class GetVideoUploadByUserIdUseCase {
         const video = await this.videoRepository.getVideoUploadByUserId(userId, fileName);
 
         if (!video) {  
-            throw new NotFoundError('Image file not found');
+            throw new NotFoundError('Video upload failed');
         }
 
         return video;
