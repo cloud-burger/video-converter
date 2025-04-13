@@ -39,3 +39,9 @@ functions:
       - http:
           method: GET
           path: /processed/{videoId}
+  get-video-upload:
+    handler: src/api/handlers/get-video-upload/handler.handler
+    events:
+      - http:
+          method: GET
+          path: /upload/{fileName}
