@@ -8,8 +8,14 @@ provider:
   name: aws
   stage: dev
   runtime: nodejs20.x
+  region: us-east-1
   environment:
-    TEST: test
+    BUCKET_NAME: teste-fase5
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource: arn:aws:s3:::teste-fase5/*
 
 custom:
   esbuild:
@@ -27,9 +33,9 @@ plugins:
   - serverless-offline
 
 functions:
-  authorizer:
-    handler: src/cmd/functions/authorizer/index.handler
+  get-images:
+    handler: src/api/handlers/get-images/handler.handler
     events:
       - http:
           method: GET
-          path: /authorizer
+          path: /processed/{videoId}
