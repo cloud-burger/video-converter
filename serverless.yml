@@ -1,4 +1,4 @@
-service: video-upload
+service: video-converter
 
 frameworkVersion: "3"
 package:
