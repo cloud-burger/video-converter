@@ -10,12 +10,7 @@ provider:
   runtime: nodejs20.x
   region: us-east-1
   environment:
-    BUCKET_NAME: teste-fase5
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - s3:GetObject
-      Resource: arn:aws:s3:::teste-fase5/*
+    BUCKET_NAME: video-processor-files-prod
 
 custom:
   esbuild:
@@ -33,9 +28,30 @@ plugins:
   - serverless-offline
 
 functions:
-  get-images:
-    handler: src/api/handlers/get-images/handler.handler
+  list-videos:
+    handler: src/app/handlers/list-videos/index.handler
     events:
       - http:
           method: GET
-          path: /processed/{videoId}
+          path: /video
+  get-video-url:
+    handler: src/app/handlers/get-video-url/index.handler
+    events:
+      - http:
+          method: GET
+          path: /video/url
+  process-video:
+    handler: src/app/handlers/process-video/index.handler
+    events:
+      - s3:
+          bucket: video-processor-files-prod
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploads/
+            - suffix: .mp4
+  get-video-frames:
+    handler: src/app/handlers/get-video-frames/index.handler
+    events:
+      - http:
+          method: GET
+          path: /video/{id}/frame

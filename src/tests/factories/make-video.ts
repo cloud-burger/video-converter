@@ -8,7 +8,7 @@ export const makeVideo = (override: Partial<Video> = {}): Video =>
     status: VideoStatus.UPLOADED,
     url: {
       video: 's3://video.mp4',
-      frames: 's3://videos.zip',
+      frames: 's3://frames.zip',
     },
     user: {
       email: 'user@email.com',
