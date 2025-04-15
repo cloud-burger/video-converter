@@ -1,21 +1,19 @@
 import { Entity, EntityProps } from '../core/entities/entity';
 import { VideoStatus } from './enums/video-status';
-import { Url } from './value-objects/url';
+import { File } from './value-objects/file';
 import { User } from './value-objects/user';
 
 export interface VideoProps extends EntityProps {
   user: User;
-  filename: string;
-  url: Url;
-  status: VideoStatus;
+  file: File;
+  status?: VideoStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export class Video extends Entity {
   user: User;
-  filename: string;
-  url: Url;
+  file: File;
   status: VideoStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -25,11 +23,20 @@ export class Video extends Entity {
 
     input.createdAt = input.createdAt ?? new Date();
     input.updatedAt = input.updatedAt ?? new Date();
+    input.status = input.status ?? VideoStatus.WAITING_UPLOAD;
 
     Object.assign(this, input);
   }
 
   updateStatus(newStatus: VideoStatus) {
     this.status = newStatus;
+  }
+
+  getVideoKey() {
+    return this.file.video;
+  }
+
+  getFramesKey() {
+    return this.file.frames;
   }
 }

@@ -1,4 +1,4 @@
-export interface Url {
+export interface File {
   video: string;
   frames?: string;
 }

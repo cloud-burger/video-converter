@@ -18,6 +18,7 @@ export default {
   moduleFileExtensions: ['ts', 'js', 'json'],
   moduleNameMapper: {
     '~/controllers/(.*)': '<rootDir>/src/adapters/controllers/$1',
+    '~/app/(.*)': '<rootDir>/src/app/$1',
     '~/domain/(.*)': '<rootDir>/src/domain/$1',
     '~/infrastructure/(.*)': '<rootDir>/src/infrastructure/$1',
   },
