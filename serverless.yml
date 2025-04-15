@@ -49,9 +49,9 @@ functions:
           rules:
             - prefix: videos/
             - suffix: .mp4
-  get-video-frames:
-    handler: src/app/handlers/get-video-frames/index.handler
+  get-video-frames-url:
+    handler: src/app/handlers/get-video-frames-url/index.handler
     events:
       - http:
           method: GET
-          path: /video/{id}/frame
+          path: /video/{id}/frame-url

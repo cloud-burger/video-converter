@@ -17,8 +17,8 @@ describe('Controllers - Get video url', () => {
 
     const response = await getVideoUrlController.handler({
       user: {
-        id: '123',
-        email: 'tst@gmail.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+        email: 'user@email.com',
       },
     } as unknown as Request);
 
@@ -29,7 +29,10 @@ describe('Controllers - Get video url', () => {
       },
     });
     expect(getVideoUrlUseCase.execute).toHaveBeenNthCalledWith(1, {
-      user: { email: 'tst@gmail.com', id: '123' },
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
     });
   });
 });
