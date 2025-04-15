@@ -6,10 +6,8 @@
   "scripts": {
     "test": "jest --collect-coverage",
     "validate": "npx tsc -noEmit --skipLibCheck",
-    "start": "node dist/api/server.js",
-    "lint": "eslint --fix",
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored --ignore '**/*.test.js'",
-    "dev": "ts-node-dev -r --respawn --transpile-only --ignore-watch node_modules --no-notify src/api/server.ts"
+    "start": "set SLS_DEBUG=* && serverless offline start --reloadHandler --noTimeout",
+    "lint": "eslint --fix"
   },
   "author": "",
   "license": "ISC",
@@ -56,8 +54,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.779.0",
     "@aws-sdk/s3-request-presigner": "^3.779.0",
-    "@cloud-burger/aws-wrappers": "^0.0.2",
-    "@cloud-burger/handlers": "^1.0.0",
+    "@cloud-burger/aws-wrappers": "^0.0.3",
+    "@cloud-burger/handlers": "^1.0.6",
     "@cloud-burger/http-wrappers": "^0.0.1",
     "@cloud-burger/logger": "^1.0.0",
     "@cloud-burger/utils": "^1.0.0",
