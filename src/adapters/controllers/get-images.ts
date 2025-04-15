@@ -1,4 +1,4 @@
-import { Controller, Response } from '@cloud-burger/handlers';
+import { Controller, Request, Response } from '@cloud-burger/handlers';
 import logger from '@cloud-burger/logger';
 import { GetImageResponse } from 'adapters/presenters/dtos/get-image-response';
 import { GetImagePresenter } from 'adapters/presenters/get-image-presenter';
@@ -8,21 +8,21 @@ export class GetImagesByUserIdController {
   constructor(private getImagesByUserIdUseCase: GetImagesByUserIdUseCase) {}
 
   handler: Controller = async (
-    request: any,
+    request: Request,
   ): Promise<Response<GetImageResponse>> => {
-    const userId = request.headers.userid;
+    const { user } = request;
     const { videoId } = request.pathParameters;
 
     logger.info({
       message: 'Find image zip by user id',
       data: {
         request,
-        userId,
+        user,
       },
     });
 
     const image = await this.getImagesByUserIdUseCase.execute({
-      userId,
+      userId: user.id,
       videoId,
     });
 
