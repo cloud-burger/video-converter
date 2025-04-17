@@ -21,6 +21,7 @@
     "resolveJsonModule": true,
     "paths": {
       "~/controllers/*": ["./adapters/controllers/*"],
+      "~/app/*": ["./app/*"],
       "~/domain/*": ["./domain/*"],
       "~/infrastructure/*": ["./infrastructure/*"]
     },

@@ -47,7 +47,7 @@ functions:
           bucket: video-processor-files-prod
           event: s3:ObjectCreated:*
           rules:
-            - prefix: uploads/
+            - prefix: videos/
             - suffix: .mp4
   get-video-frames:
     handler: src/app/handlers/get-video-frames/index.handler

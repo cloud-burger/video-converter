@@ -15,9 +15,8 @@ CREATE TABLE IF NOT EXISTS videos (
     status VARCHAR(50) NOT NULL,
     user_id VARCHAR(100) NOT NULL,
     user_email VARCHAR(100) NOT NULL,
-    file_name VARCHAR(255) NOT NULL,
-    file_url VARCHAR(500) NOT NULL,
-    file_frames_url VARCHAR(500)
+    file_key VARCHAR(255) NOT NULL,
+    file_frames_key VARCHAR(500)
 );
 
 -- (opcional) index para facilitar buscas por user_id
