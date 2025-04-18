@@ -1,8 +1,12 @@
 import Connection from 'app/postgres/connection';
 import { Video } from '~/domain/entities/video';
-import { VideoRepository as IVideoRepository } from '~/domain/repositories/video';
+import {
+  VideoRepository as IVideoRepository,
+  VideoPaginationParams,
+} from '~/domain/repositories/video';
 import { VideoDatabaseSchema } from './dtos/video-database-schema';
 import { DatabaseVideoMapper } from './mappers/database-video';
+import { FIND_MANY } from './queries/find-many';
 import { FIND_VIDEO_BY_ID_AND_USER_ID } from './queries/find-video-by-id-and-user-id';
 import { INSERT_VIDEO } from './queries/insert-video';
 
@@ -48,7 +52,14 @@ export class VideoRepository implements IVideoRepository {
     });
   }
 
-  findManyByUserId(userId: string): Promise<Video[]> {
-    throw new Error('Method not implemented.');
+  async findMany(input: VideoPaginationParams): Promise<Video[]> {
+    const { records } = await this.connection.query({
+      sql: FIND_MANY(input),
+      parameters: { ...input },
+    });
+
+    return records.map((record) => {
+      return DatabaseVideoMapper.toDomain(record as VideoDatabaseSchema);
+    });
   }
 }
