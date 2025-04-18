@@ -1,5 +1,4 @@
-export interface ImageStorage {
-  findById(id: string): Promise<Buffer | null>;
-  getUrlById(id: string, expiresIn?: number): Promise<string>;
+export interface FrameStorage {
+  getUrlByKey(key: string): Promise<string>;
   save(id: string, file: Buffer): Promise<void>;
 }
