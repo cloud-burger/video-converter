@@ -62,4 +62,8 @@ export class VideoRepository implements IVideoRepository {
       return DatabaseVideoMapper.toDomain(record as VideoDatabaseSchema);
     });
   }
+
+  update(video: Video): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }

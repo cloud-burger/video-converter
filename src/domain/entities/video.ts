@@ -39,4 +39,8 @@ export class Video extends Entity {
   getFramesKey() {
     return this.file.frames;
   }
+
+  setFramesKey(key) {
+    this.file.frames = key;
+  }
 }
