@@ -94,9 +94,32 @@ describe('Use cases - Process video', () => {
       'eba521ba-f6b7-46b5-ab5f-dd582495705e',
       '8336d93d-a599-4703-9a28-357e61db4dae',
     );
-    expect(videoRepository.update).toHaveBeenNthCalledWith(1);
-    expect(videoStorage.getByKey).toHaveBeenNthCalledWith(1);
-    expect(frameExtractorHandler.extractFromBuffer).toHaveBeenNthCalledWith(1);
+    expect(videoRepository.update).toHaveBeenNthCalledWith(1, {
+      createdAt: expect.any(Date),
+      file: { frames: 's3://frames.zip', video: 's3://video.mp4' },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'FAILED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
+    expect(videoRepository.update).toHaveBeenNthCalledWith(2, {
+      createdAt: expect.any(Date),
+      file: { frames: 's3://frames.zip', video: 's3://video.mp4' },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'FAILED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
+    expect(videoStorage.getByKey).toHaveBeenNthCalledWith(1, 's3://video.mp4');
+    expect(frameExtractorHandler.extractFromBuffer).toHaveBeenNthCalledWith(1, {
+      video: new Buffer('test'),
+    });
     expect(fileCompressorHandler.compress).not.toHaveBeenCalled();
     expect(frameStorage.save).not.toHaveBeenCalled();
   });
@@ -128,12 +151,52 @@ describe('Use cases - Process video', () => {
       'eba521ba-f6b7-46b5-ab5f-dd582495705e',
       '8336d93d-a599-4703-9a28-357e61db4dae',
     );
-    expect(videoRepository.update).toHaveBeenNthCalledWith(1);
-    expect(videoRepository.update).toHaveBeenNthCalledWith(2);
-    expect(videoRepository.update).toHaveBeenNthCalledWith(3);
-    expect(videoStorage.getByKey).toHaveBeenNthCalledWith(1);
-    expect(frameExtractorHandler.extractFromBuffer).toHaveBeenNthCalledWith(1);
-    expect(fileCompressorHandler.compress).toHaveBeenNthCalledWith(1);
-    expect(frameStorage.save).toHaveBeenNthCalledWith(1);
+    expect(videoRepository.update).toHaveBeenNthCalledWith(1, {
+      createdAt: expect.any(Date),
+      file: {
+        frames:
+          'frames/8336d93d-a599-4703-9a28-357e61db4dae/eba521ba-f6b7-46b5-ab5f-dd582495705e.zip',
+        video: 's3://video.mp4',
+      },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'PROCESSED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
+    expect(videoRepository.update).toHaveBeenNthCalledWith(2, {
+      createdAt: expect.any(Date),
+      file: {
+        frames:
+          'frames/8336d93d-a599-4703-9a28-357e61db4dae/eba521ba-f6b7-46b5-ab5f-dd582495705e.zip',
+        video: 's3://video.mp4',
+      },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'PROCESSED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
+
+    expect(videoStorage.getByKey).toHaveBeenNthCalledWith(1, 's3://video.mp4');
+    expect(frameExtractorHandler.extractFromBuffer).toHaveBeenNthCalledWith(1, {
+      video: new Buffer('test'),
+    });
+    expect(fileCompressorHandler.compress).toHaveBeenNthCalledWith(1, [
+      {
+        content: new Buffer('test'),
+        extension: 'jpg',
+        name: 'test.jpg',
+      },
+    ]);
+    expect(frameStorage.save).toHaveBeenNthCalledWith(
+      1,
+      'frames/8336d93d-a599-4703-9a28-357e61db4dae/eba521ba-f6b7-46b5-ab5f-dd582495705e.zip',
+      new Buffer('compress'),
+    );
   });
 });
