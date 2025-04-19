@@ -1,7 +1,5 @@
-import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { S3Event } from 'aws-lambda';
 
-export const handler = async (
-  event: APIGatewayEvent,
-): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: S3Event): Promise<void> => {
   return null;
 };

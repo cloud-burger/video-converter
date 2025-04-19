@@ -1,5 +1,9 @@
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@cloud-burger/aws-wrappers';
+import { getObject, getSignedUrl } from '@cloud-burger/aws-wrappers';
+import { InternalServerError } from '@cloud-burger/handlers';
+import logger from '@cloud-burger/logger';
+import { Readable } from 'stream';
+import { streamToBuffer } from 'utils/stream-to-buffer';
 import { VideoStorage as IVideoStorage } from '~/domain/storage/video-storage';
 
 export class VideoStorage implements IVideoStorage {
@@ -16,7 +20,21 @@ export class VideoStorage implements IVideoStorage {
     return url;
   }
 
-  getByKey(key: string): Promise<Buffer> {
-    throw new Error('Method not implemented.');
+  async getByKey(key: string): Promise<Buffer> {
+    const object = await getObject({
+      Bucket: this.storageName,
+      Key: key,
+    });
+
+    if (!object.Body || !(object.Body instanceof Readable)) {
+      logger.error({
+        message: 'Invalid S3 object',
+        data: object,
+      });
+
+      throw new InternalServerError('Invalid S3 object Body');
+    }
+
+    return await streamToBuffer(object.Body);
   }
 }

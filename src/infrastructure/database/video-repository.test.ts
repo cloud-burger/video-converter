@@ -41,6 +41,31 @@ describe('Infrastructure - Database - Video Repository', () => {
     });
   });
 
+  it('should update video successfully', async () => {
+    connection.query.mockResolvedValue({
+      records: [],
+    });
+
+    await videoRepository.update(
+      makeVideo({
+        file: {
+          video: 's3://video.mp4',
+        },
+      }),
+    );
+
+    expect(connection.query).toHaveBeenNthCalledWith(1, {
+      parameters: {
+        file_frames_key: null,
+        id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+        user_id: '8336d93d-a599-4703-9a28-357e61db4dae',
+        status: 'UPLOADED',
+        updated_at: expect.any(String),
+      },
+      sql: 'UPDATE public.videos SET status=:status, file_frames_key=:file_frames_key, updated_at=:updated_at WHERE id=:id and user_id=:user_id;',
+    });
+  });
+
   it('should return null when find video by id and user id and video does not exists', async () => {
     connection.query.mockResolvedValue({
       records: [],

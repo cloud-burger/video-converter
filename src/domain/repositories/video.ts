@@ -9,6 +9,7 @@ export interface VideoPaginationParams {
 
 export interface VideoRepository {
   save(video: Video): Promise<void>;
+  update(video: Video): Promise<void>;
   findByIdAndUserId(id: string, userId: string): Promise<Video | null>;
   findMany(input: VideoPaginationParams): Promise<Video[]>;
 }
