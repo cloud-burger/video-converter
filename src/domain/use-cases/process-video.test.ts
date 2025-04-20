@@ -3,6 +3,7 @@ import { makeVideo } from 'tests/factories/make-video';
 import { FileCompressorHandler } from '~/infrastructure/file/compressor-handler';
 import { FrameExtractorHandler } from '~/infrastructure/file/frame-extractor-handler';
 import { VideoStatus } from '../entities/enums/video-status';
+import { VideoPublisher } from '../publisher/video-publisher';
 import { VideoRepository } from '../repositories/video';
 import { FrameStorage } from '../storage/image-storage';
 import { VideoStorage } from '../storage/video-storage';
@@ -14,6 +15,7 @@ describe('Use cases - Process video', () => {
   let frameStorage: MockProxy<FrameStorage>;
   let frameExtractorHandler: MockProxy<FrameExtractorHandler>;
   let fileCompressorHandler: MockProxy<FileCompressorHandler>;
+  let videoPublisher: MockProxy<VideoPublisher>;
   let processVideoUseCase: ProcessVideoUseCase;
 
   beforeAll(() => {
@@ -22,12 +24,14 @@ describe('Use cases - Process video', () => {
     frameStorage = mock();
     frameExtractorHandler = mock();
     fileCompressorHandler = mock();
+    videoPublisher = mock();
     processVideoUseCase = new ProcessVideoUseCase(
       videoRepository,
       videoStorage,
       frameStorage,
       frameExtractorHandler,
       fileCompressorHandler,
+      videoPublisher,
     );
   });
 
@@ -51,6 +55,7 @@ describe('Use cases - Process video', () => {
     expect(frameExtractorHandler.extractFromBuffer).not.toHaveBeenCalled();
     expect(fileCompressorHandler.compress).not.toHaveBeenCalled();
     expect(frameStorage.save).not.toHaveBeenCalled();
+    expect(videoPublisher.publish).not.toHaveBeenCalled();
   });
 
   it('should return when video has already been processed', async () => {
@@ -75,6 +80,7 @@ describe('Use cases - Process video', () => {
     expect(frameExtractorHandler.extractFromBuffer).not.toHaveBeenCalled();
     expect(fileCompressorHandler.compress).not.toHaveBeenCalled();
     expect(frameStorage.save).not.toHaveBeenCalled();
+    expect(videoPublisher.publish).not.toHaveBeenCalled();
   });
 
   it('should return when error while process video frames', async () => {
@@ -122,6 +128,17 @@ describe('Use cases - Process video', () => {
     });
     expect(fileCompressorHandler.compress).not.toHaveBeenCalled();
     expect(frameStorage.save).not.toHaveBeenCalled();
+    expect(videoPublisher.publish).toHaveBeenNthCalledWith(1, {
+      createdAt: expect.any(Date),
+      file: { frames: 's3://frames.zip', video: 's3://video.mp4' },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'FAILED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
   });
 
   it('should process video frames successfully', async () => {
@@ -198,5 +215,20 @@ describe('Use cases - Process video', () => {
       'frames/8336d93d-a599-4703-9a28-357e61db4dae/eba521ba-f6b7-46b5-ab5f-dd582495705e.zip',
       new Buffer('compress'),
     );
+    expect(videoPublisher.publish).toHaveBeenNthCalledWith(1, {
+      createdAt: expect.any(Date),
+      file: {
+        frames:
+          'frames/8336d93d-a599-4703-9a28-357e61db4dae/eba521ba-f6b7-46b5-ab5f-dd582495705e.zip',
+        video: 's3://video.mp4',
+      },
+      id: 'eba521ba-f6b7-46b5-ab5f-dd582495705e',
+      status: 'PROCESSED',
+      updatedAt: expect.any(Date),
+      user: {
+        email: 'user@email.com',
+        id: '8336d93d-a599-4703-9a28-357e61db4dae',
+      },
+    });
   });
 });

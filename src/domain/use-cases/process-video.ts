@@ -4,6 +4,7 @@ import { FileCompressorHandler } from '~/infrastructure/file/compressor-handler'
 import { FrameExtractorHandler } from '~/infrastructure/file/frame-extractor-handler';
 import { VideoStatus } from '../entities/enums/video-status';
 import { Video } from '../entities/video';
+import { VideoPublisher } from '../publisher/video-publisher';
 import { VideoRepository } from '../repositories/video';
 import { FrameStorage } from '../storage/image-storage';
 import { VideoStorage } from '../storage/video-storage';
@@ -20,6 +21,7 @@ export class ProcessVideoUseCase {
     private frameStorage: FrameStorage,
     private frameExtractorHandler: FrameExtractorHandler,
     private fileCompressorHandler: FileCompressorHandler,
+    private videoPublisher: VideoPublisher,
   ) {}
 
   async execute({ videoId, userId }: Input): Promise<void> {
@@ -90,13 +92,14 @@ export class ProcessVideoUseCase {
 
       video.updateStatus(VideoStatus.FAILED);
       await this.updateVideo(video);
+      await this.publishVideo(video);
 
-      // send email notification
       return;
     }
 
     video.updateStatus(VideoStatus.PROCESSED);
     await this.updateVideo(video);
+    await this.publishVideo(video);
 
     logger.debug({
       message: 'Video frames extracted successfully',
@@ -111,5 +114,14 @@ export class ProcessVideoUseCase {
     });
 
     return await this.videoRepository.update(video);
+  }
+
+  private async publishVideo(video: Video): Promise<void> {
+    logger.debug({
+      message: 'Publishing video',
+      data: video,
+    });
+
+    return await this.videoPublisher.publish(video);
   }
 }
