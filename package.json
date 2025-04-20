@@ -55,7 +55,7 @@
     "@aws-sdk/client-s3": "^3.779.0",
     "@aws-sdk/s3-request-presigner": "^3.779.0",
     "@cloud-burger/aws-wrappers": "^0.0.3",
-    "@cloud-burger/handlers": "^1.0.6",
+    "@cloud-burger/handlers": "^1.0.7",
     "@cloud-burger/http-wrappers": "^0.0.1",
     "@cloud-burger/logger": "^1.0.0",
     "@cloud-burger/utils": "^1.0.0",

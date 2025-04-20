@@ -1,8 +1,9 @@
 import * as ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
+import * as os from 'os';
 import * as path from 'path';
-import { getTmpDir } from 'utils/get-tmp-dir';
 import { v4 as uuidv4 } from 'uuid';
+
 export interface ExtractFramesFromBufferInput {
   video: Buffer;
 }
@@ -19,7 +20,7 @@ export class FrameExtractorHandler {
   async extractFromBuffer({
     video,
   }: ExtractFramesFromBufferInput): Promise<ExtractedFrame[]> {
-    const tmpDir = path.join(getTmpDir(), `video-${uuidv4()}`);
+    const tmpDir = path.join(os.tmpdir(), `video-${uuidv4()}`);
     const videoPath = path.join(tmpDir, 'input.mp4');
     const outputFolder = path.join(tmpDir, 'frames');
 

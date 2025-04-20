@@ -44,7 +44,7 @@ functions:
     handler: src/app/handlers/process-video/index.handler
     events:
       - s3:
-          bucket: video-processor-files-prod
+          bucket: video-converter-files-prod
           event: s3:ObjectCreated:*
           rules:
             - prefix: videos/
