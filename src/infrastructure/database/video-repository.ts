@@ -9,6 +9,7 @@ import { DatabaseVideoMapper } from './mappers/database-video';
 import { FIND_MANY } from './queries/find-many';
 import { FIND_VIDEO_BY_ID_AND_USER_ID } from './queries/find-video-by-id-and-user-id';
 import { INSERT_VIDEO } from './queries/insert-video';
+import { UPDATE_VIDEO } from './queries/update-video';
 
 export class VideoRepository implements IVideoRepository {
   constructor(private connection: Connection) {}
@@ -60,6 +61,21 @@ export class VideoRepository implements IVideoRepository {
 
     return records.map((record) => {
       return DatabaseVideoMapper.toDomain(record as VideoDatabaseSchema);
+    });
+  }
+
+  async update(video: Video): Promise<void> {
+    const recordToSave = DatabaseVideoMapper.toDatabase(video);
+
+    await this.connection.query({
+      sql: UPDATE_VIDEO,
+      parameters: {
+        id: recordToSave.id,
+        user_id: recordToSave.user_id,
+        status: recordToSave.status,
+        file_frames_key: recordToSave.file_frames_key,
+        updated_at: new Date().toISOString(),
+      },
     });
   }
 }

@@ -1,5 +1,5 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@cloud-burger/aws-wrappers';
+import { getSignedUrl, putObject } from '@cloud-burger/aws-wrappers';
 import { FrameStorage as IFrameStorage } from '~/domain/storage/image-storage';
 
 export class FrameStorage implements IFrameStorage {
@@ -15,7 +15,11 @@ export class FrameStorage implements IFrameStorage {
 
     return url;
   }
-  save(id: string, file: Buffer): Promise<void> {
-    throw new Error('Method not implemented.');
+  async save(id: string, file: Buffer): Promise<void> {
+    await putObject({
+      Bucket: this.storageName,
+      Key: id,
+      Body: file,
+    });
   }
 }

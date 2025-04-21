@@ -10,6 +10,7 @@ interface EnvSchemaProps {
   DATABASE_HOST: string;
   DATABASE_CONNECTION_TIMEOUT: string;
   BUCKET_NAME: string;
+  VIDEO_QUEUE_URL: string;
 }
 
 export const envSchema = Joi.object({
@@ -21,6 +22,7 @@ export const envSchema = Joi.object({
   DATABASE_HOST: Joi.string().required(),
   DATABASE_CONNECTION_TIMEOUT: Joi.string().required(),
   BUCKET_NAME: Joi.string().required(),
+  VIDEO_QUEUE_URL: Joi.string().required(),
 });
 
 const { value } = envSchema.validate(process.env);
