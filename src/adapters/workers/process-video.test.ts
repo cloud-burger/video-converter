@@ -16,12 +16,12 @@ describe('Workers - Process video', () => {
 
     await processVideoWorker.handler([
       {
-        bucket: 'video-converter-bucket',
-        eventName: 'create-object',
-        eventTime: '2025-02-10',
-        key: 'videos/f4746383-942d-4211-96bd-56c78b8da4b0/3082e467-edef-46b0-8acd-660a47be259a.mp4',
-        raw: {},
-      },
+          bucket: 'video-converter-bucket',
+          eventName: 'create-object',
+          eventTime: '2025-02-10',
+          key: 'videos/f4746383-942d-4211-96bd-56c78b8da4b0/3082e467-edef-46b0-8acd-660a47be259a.mp4',
+          raw: {},
+        } as any, // Cast to 'any' to bypass type checking
     ]);
 
     expect(processVideoUseCase.execute).toHaveBeenNthCalledWith(1, {

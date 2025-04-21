@@ -1,4 +1,4 @@
-import * as ffmpeg from 'fluent-ffmpeg';
+import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
@@ -72,7 +72,7 @@ export class FrameExtractorHandler {
         .seekInput(second)
         .frames(1)
         .output(outputPath)
-        .on('end', resolve)
+        .on('end', () => resolve())
         .on('error', reject)
         .run();
     });

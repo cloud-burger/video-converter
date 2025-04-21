@@ -8,6 +8,11 @@ import { handler } from '.';
 jest.mock('~/app/postgres/connection');
 jest.mock('~/app/postgres/pool');
 jest.mock('~/app/postgres/pool-factory');
+jest.mock('@cloud-burger/handlers', () => ({
+  LambdaS3Handler: jest.fn().mockImplementation(() => ({
+    handler: jest.fn(),
+  })),
+}));
 
 describe('Handlers - Process video', () => {
   const poolFactoryMock = jest.mocked(PoolFactory);
