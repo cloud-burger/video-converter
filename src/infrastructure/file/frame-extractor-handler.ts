@@ -1,4 +1,4 @@
-import ffmpeg from 'fluent-ffmpeg';
+import Ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
@@ -55,7 +55,7 @@ export class FrameExtractorHandler {
 
   private getVideoDuration(filePath: string): Promise<number> {
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(filePath, (err, metadata) => {
+      Ffmpeg.ffprobe(filePath, (err, metadata) => {
         if (err) return reject(err);
         resolve(metadata.format.duration ?? 0);
       });
@@ -68,7 +68,7 @@ export class FrameExtractorHandler {
     second: number,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      ffmpeg(videoPath)
+      Ffmpeg(videoPath)
         .seekInput(second)
         .frames(1)
         .output(outputPath)
