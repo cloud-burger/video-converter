@@ -1,5 +1,5 @@
 -- cria banco de dados
-CREATE DATABASE video_converter;
+CREATE DATABASE converter;
 
 -- conecta no banco criado
 \c video_converter;
