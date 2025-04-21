@@ -1,3 +1,4 @@
+import logger from '@cloud-burger/logger';
 import Ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs/promises';
 import * as os from 'os';
@@ -20,6 +21,8 @@ export class FrameExtractorHandler {
   async extractFromBuffer({
     video,
   }: ExtractFramesFromBufferInput): Promise<ExtractedFrame[]> {
+    logger.debug('Init frame extractor tmp dir');
+
     const tmpDir = path.join(os.tmpdir(), `video-${uuidv4()}`);
     const videoPath = path.join(tmpDir, 'input.mp4');
     const outputFolder = path.join(tmpDir, 'frames');
@@ -28,14 +31,21 @@ export class FrameExtractorHandler {
     await fs.mkdir(tmpDir, { recursive: true });
     await fs.writeFile(videoPath, video);
 
+    logger.debug('Getting video duration');
     const duration = await this.getVideoDuration(videoPath);
 
     for (let second = 0; second < duration; second += this.interval) {
+      logger.debug('Writing new frame');
+
       const outputPath = path.join(outputFolder, `frame-${second}.jpg`);
+
+      logger.debug('Getting frame');
       await this.captureFrame(videoPath, outputPath, second);
     }
 
     const files = await fs.readdir(outputFolder);
+
+    logger.debug('Reading extracted frames');
 
     const frames: ExtractedFrame[] = await Promise.all(
       files.map(async (fileName) => {
@@ -49,6 +59,8 @@ export class FrameExtractorHandler {
     );
 
     await fs.rm(tmpDir, { recursive: true, force: true });
+
+    logger.debug('Frame extraction done');
 
     return frames;
   }
