@@ -41,3 +41,36 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Serverless
+        run: npm i -g serverless@3.39.0
+
+      - name: Install Serverless ESbuild
+        run: serverless plugin install -n serverless-esbuild
+
+      - name: Serverless Package
+        run: serverless package --package artifacts
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Upload to S3
+        id: upload
+        run: |
+          aws s3 cp ./artifacts/list-videos.zip s3://cloud-burger-artifacts/list-videos.zip
+          aws s3 cp ./artifacts/get-video-url.zip s3://cloud-burger-artifacts/get-video-url.zip
+          aws s3 cp ./artifacts/process-video.zip s3://cloud-burger-artifacts/process-video.zip
+          aws s3 cp ./artifacts/get-video-frames-url.zip s3://cloud-burger-artifacts/get-video-frames-url.zip
