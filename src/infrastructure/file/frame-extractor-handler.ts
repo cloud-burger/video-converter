@@ -5,22 +5,6 @@ import * as os from 'os';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-import { execSync } from 'child_process';
-
-try {
-  const output = execSync('/opt/nodejs/bin/ffmpeg -version').toString();
-  console.log('ffmpeg is executable:', output.split('\n')[0]);
-} catch (error) {
-  console.error('Error executing ffmpeg:', error);
-}
-
-try {
-  const output = execSync('/opt/nodejs/bin/ffprobe -version').toString();
-  console.log('ffprobe is executable:', output.split('\n')[0]);
-} catch (error) {
-  console.error('Error executing ffprobe:', error);
-}
-
 // Configure o caminho para os binários do FFmpeg
 Ffmpeg.setFfmpegPath('/opt/nodejs/bin/ffmpeg');
 Ffmpeg.setFfprobePath('/opt/nodejs/bin/ffprobe');
@@ -88,10 +72,7 @@ export class FrameExtractorHandler {
   private getVideoDuration(filePath: string): Promise<number> {
     return new Promise((resolve, reject) => {
       Ffmpeg.ffprobe(filePath, (err, metadata) => {
-        if (err) {
-          console.error('FFPROBE ERROR:', err);
-          return reject(err);
-        }
+        if (err) return reject(err);
         resolve(metadata.format.duration ?? 0);
       });
     });
