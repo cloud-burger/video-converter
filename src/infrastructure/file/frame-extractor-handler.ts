@@ -5,6 +5,17 @@ import * as os from 'os';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+import * as fs1 from 'fs';
+
+console.log('Checking otp path:', fs1.existsSync('/opt/'));
+console.log('Checking node path:', fs1.existsSync('/opt/nodejs/'));
+console.log('Checking bin path:', fs1.existsSync('/opt/nodejs/bin/'));
+console.log('Checking ffmpeg path:', fs1.existsSync('/opt/nodejs/bin/ffmpeg'));
+console.log(
+  'Checking ffprobe path:',
+  fs1.existsSync('/opt/nodejs/bin/ffprobe'),
+);
+
 // Configure o caminho para os binários do FFmpeg
 Ffmpeg.setFfmpegPath('/opt/nodejs/bin/ffmpeg');
 Ffmpeg.setFfprobePath('/opt/nodejs/bin/ffprobe');
