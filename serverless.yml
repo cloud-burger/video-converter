@@ -6,9 +6,12 @@ package:
 
 provider:
   name: aws
-  stage: dev
-  runtime: nodejs20.x
+  stage: prod
   region: us-east-1
+  ecr:
+    images:
+      app:
+        path: .
   environment:
     BUCKET_NAME: video-processor-files-prod
 
@@ -29,19 +32,27 @@ plugins:
 
 functions:
   list-videos:
-    handler: src/app/handlers/list-videos/index.handler
+    image:
+      name: app
+      command: [ "src/app/handlers/list-videos/index.handler" ]
     events:
       - http:
           method: GET
           path: /video
+
   get-video-url:
-    handler: src/app/handlers/get-video-url/index.handler
+    image:
+      name: app
+      command: [ "src/app/handlers/get-video-url/index.handler" ]
     events:
       - http:
           method: GET
           path: /video/url
+
   process-video:
-    handler: src/app/handlers/process-video/index.handler
+    image:
+      name: app
+      command: [ "src/app/handlers/process-video/index.handler" ]
     events:
       - s3:
           bucket: video-converter-files-prod
@@ -49,8 +60,11 @@ functions:
           rules:
             - prefix: videos/
             - suffix: .mp4
+
   get-video-frames-url:
-    handler: src/app/handlers/get-video-frames-url/index.handler
+    image:
+      name: app
+      command: [ "src/app/handlers/get-video-frames-url/index.handler" ]
     events:
       - http:
           method: GET
