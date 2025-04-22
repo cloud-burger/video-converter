@@ -5,6 +5,10 @@ import * as os from 'os';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+const binPath = '/opt/bin';
+Ffmpeg.setFfmpegPath(path.join(binPath, 'ffmpeg'));
+Ffmpeg.setFfprobePath(path.join(binPath, 'ffprobe'));
+
 export interface ExtractFramesFromBufferInput {
   video: Buffer;
 }
