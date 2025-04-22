@@ -30,6 +30,8 @@ jest.mock('fluent-ffmpeg', () => {
         cb(null, { format: { duration: 20 } });
       },
     ),
+    setFfmpegPath: jest.fn(),
+    setFfprobePath: jest.fn(),
   });
 
   return ffmpegFn;
