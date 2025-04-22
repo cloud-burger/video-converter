@@ -5,6 +5,10 @@ import * as os from 'os';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+// Configure o caminho para os binários do FFmpeg
+Ffmpeg.setFfmpegPath('/opt/nodejs/bin/ffmpeg');
+Ffmpeg.setFfprobePath('/opt/nodejs/bin/ffprobe');
+
 export interface ExtractFramesFromBufferInput {
   video: Buffer;
 }
