@@ -1,6 +1,6 @@
 # 📹 Video Upload & Screenshot Service
 
-Este projeto é um serviço **serverless** escrito em **TypeScript** e baseado na **Arquitetura Hexagonal (Ports & Adapters)**. Ele permite o **upload de vídeos**, gera **screenshots automáticas a cada 10 minutos**, compacta as imagens em um `.zip` e armazena no **Amazon S3**. O status do processamento e os arquivos são monitorados via **API Gateway** com autenticação via **Cognito**.
+Este projeto é um serviço **serverless** escrito em **TypeScript** e baseado na **Arquitetura Limpa (Clean Architecture)**. Ele permite o **upload de vídeos**, gera **screenshots automáticas a cada 20 segundos**, compacta as imagens em um `.zip` e armazena no **Amazon S3**. O status do processamento e os arquivos são monitorados via **API Gateway** com autenticação via **Cognito**.
 
 ---
 
