@@ -12,3 +12,5 @@ COPY --chown=node:node . .
 RUN npm install
 RUN npm run build
 RUN rm -rf src
+RUN apt update
+RUN apt install ffmpeg -y
